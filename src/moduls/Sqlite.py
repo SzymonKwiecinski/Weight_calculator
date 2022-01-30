@@ -1,3 +1,4 @@
+from re import search
 import secrets
 import sys
 import os
@@ -58,7 +59,9 @@ class Sqlite:
         except Exception:
             traceback.print_exc()
     
-    
+    def query_to_list(self, sql_str: str):
+        self.query(sql_str)
+        return self._query_to_list()
     
     
     #############
