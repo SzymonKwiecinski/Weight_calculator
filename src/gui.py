@@ -1,10 +1,10 @@
 import sqlite3
 import sys
 import os
-sys.path.append(os.path.abspath(".."))
-sys.path.append(f'{os.path.abspath("..")}\\venv')
-sys.path.append(f'{os.path.abspath("..")}\\venv\\Scripts')
-sys.path.append(f'{os.path.abspath("..")}\\venv\\Lib\\site-packages')
+sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(1, f'{os.path.abspath("..")}\\venv')
+sys.path.insert(2, f'{os.path.abspath("..")}\\venv\\Scripts')
+sys.path.insert(3, f'{os.path.abspath("..")}\\venv\\Lib\\site-packages')
 
 
 from PyQt6 import QtWidgets
@@ -16,7 +16,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 import re
 
-from moduls.position import Position
+from src.moduls.position import Position
 from src.moduls.sqlite import Sqlite
 from src.moduls import tools
 
@@ -642,13 +642,12 @@ class Window(SetUpWindow):
 #                         100szt_to_kg: {self.calc_100szt_to_kg}"""
 #         return str_repl
 
-            
-
 def main():
     app = QApplication(sys.argv)
     app.setStyle('Fusion')
-    window = Window()
+    Window()
     sys.exit(app.exec())
 
+
 if __name__ == '__main__':
-        main()
+    main()

@@ -1,13 +1,11 @@
-
-
 class Position:
 
-    def __init__(self, norm: str='', size1: str='', size2: str='', weight: float=0) -> None:
+    def __init__(self, norm: str = '', size1: str = '', size2: str = '', weight: float = 0) -> None:
         self.norm = norm
         self.size1 = size1
         self.size2 = size2
         self.weight = weight
-    
+
     @property
     def norm(self):
         return self.__norm
@@ -25,7 +23,7 @@ class Position:
     @property
     def size1(self):
         return self.__size1
-    
+
     @size1.setter
     def size1(self, size1):
         if isinstance(size1, tuple):
@@ -39,7 +37,7 @@ class Position:
     @property
     def size2(self):
         return self.__size2
-    
+
     @size2.setter
     def size2(self, size2):
         if isinstance(size2, tuple):
@@ -55,10 +53,10 @@ class Position:
     @property
     def weight(self):
         return self.__weight
-    
+
     @weight.setter
     def weight(self, weight):
-        weight  = float(weight)
+        weight = float(weight)
         if weight > 0:
             self.__weight = weight
         else:
@@ -70,7 +68,7 @@ class Position:
             return f'{self.__norm}  {self.__size1}'
         else:
             return f'{self.__norm}  {self.__size1}x{self.__size2}'
-    
+
     @property
     def calc_kg_to_100szt(self):
         val = self.__weight * (100/1000)
@@ -80,13 +78,13 @@ class Position:
     def calc_100szt_to_kg(self):
         val = (1000/100) * (1/self.__weight)
         return val
-    
+
     @property
     def weight_kg_per_1000szt(self):
         return str(self.__weight) + ' kg/1000szt.'
 
     def __repr__(self) -> str:
-        str_repl =  f"""norm: {self.norm}
+        str_repl = f"""norm: {self.norm}
                         size 1: {self.size1}
                         size 2: {self.size2}
                         weight: {self.weight}
