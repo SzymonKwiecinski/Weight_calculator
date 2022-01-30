@@ -21,5 +21,4 @@ jobs:
     - name: Test with pytest
       run: pytest -v
     - name: Test with flake8
-      run: flake src/*
-      run: flake tests/*
+      run: flake src/* flake tests/*
