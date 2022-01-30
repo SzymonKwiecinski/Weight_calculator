@@ -1,5 +1,3 @@
-from ast import arguments
-from unittest import expectedFailure
 import pytest
 from src.moduls.tools import quick_sort, str_to_number
 

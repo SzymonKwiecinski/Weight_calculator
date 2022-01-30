@@ -1,4 +1,3 @@
-from msilib.schema import Error
 import re
 
 def quick_sort(arr: list, type: str='number') -> list:
@@ -18,7 +17,7 @@ def quick_sort(arr: list, type: str='number') -> list:
     """
 
     if type not in ['str', 'number']:
-        raise Error
+        raise TypeError
 
     if type == 'str':
         l = len(arr)
