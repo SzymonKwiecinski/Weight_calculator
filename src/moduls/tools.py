@@ -12,6 +12,9 @@ def quick_sort(arr: list, type: str='number') -> list:
     Args:
         arr (list):
         type (str): 'str' or 'number' 
+    
+    Returns:
+        list
     """
 
     if type not in ['str', 'number']:
