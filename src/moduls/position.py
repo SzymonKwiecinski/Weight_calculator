@@ -1,3 +1,6 @@
+import traceback
+
+
 class Position:
     """Manages position attributes and methods
 
@@ -93,18 +96,23 @@ class Position:
 
     @property
     def calc_100szt_to_kg(self) -> float:
-        val = (1000 / 100) * (1 / self.__weight)
-        return val
+        try:
+            val = (1000 / 100) * (1 / self.__weight)
+            return val
+        except ZeroDivisionError:
+            traceback.print_exc()
+            return 0
 
     @property
     def weight_kg_per_1000szt(self) -> str:
         return str(self.__weight) + ' kg/1000szt.'
 
     def __repr__(self) -> str:
-        str_repl = f"""norm: {self.norm}
-                        size 1: {self.size1}
-                        size 2: {self.size2}
-                        weight: {self.weight}
-                        kg_to_100szt: {self.calc_kg_to_100szt}
-                        100szt_to_kg: {self.calc_100szt_to_kg}"""
+        str_repl = (
+            f"norm: {self.norm}\n"
+            f"size 1: {self.size1}\n"
+            f"size 2: {self.size2}\n"
+            f"weight: {self.weight}\n"
+            f"kg_to_100szt: {self.calc_kg_to_100szt}\n"
+            f"100szt_to_kg: {self.calc_100szt_to_kg}\n")
         return str_repl

@@ -1,25 +1,26 @@
-# import pytest
-# import sqlite3
-# from src.moduls.sqlite import Sqlite
+import os
+from pytest import mark
 
 
-# try:
-#     with Sqlite() as sql:
-#         sql.query("""
-#                 SELECT DISTINCT waga_Norma
-#                 FROM waga""")
+@mark.sqlite
+def test_db_file_exist_in_main_dir():
+    files = os.listdir()
+    assert 'sqlite.db' in files
 
-#         print(sql._query_to_list())
+@mark.sqlite
+def test_table_waga_exist_in_db(sql):
+    assert sql.query_to_list("SELECT name FROM sqlite_master") == ['waga']
 
-# except Exception as e:
-#     print(e)
-
-
-
-
-
-
-
+@mark.sqlite
+@mark.parametrize('column_name',[
+    'waga_Id',
+    'waga_Norma',
+    'waga_Rozmiar1',
+    'waga_rozmiar2',
+    'waga_Waga1000szt'])
+def test_query(sql, column_name):
+    result = sql.query_to_list(f"SELECT {column_name} FROM waga LIMIT 1")
+    assert 1 == len(result)
 
 
 

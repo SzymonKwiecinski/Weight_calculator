@@ -15,6 +15,12 @@ STYLE = """
 
 
 class SetUpWindow(QWidget):
+    """Class parent for all my windows.
+
+    Set style configuration in order to
+    contain the same layout everywhere.
+    """
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -28,11 +34,10 @@ class SetUpWindow(QWidget):
 
 
 class Window(SetUpWindow):
-
+    """Main gui widnows class."""
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle('Przelicznik Wagowy')
-
         self.ui()
 
     def ui(self):
@@ -221,7 +226,12 @@ class Window(SetUpWindow):
         self.setMaximumSize(self.width(), self.height())
         self.setMinimumSize(self.width(), self.height())
 
-    def update_list_w_norm(self):
+    def update_list_w_norm(self) -> None:
+        """Fills first WidgetList.
+
+        Execute query with products norm.
+        e.g DIN123 ..."""
+
         with Sqlite() as sql:
             result = sql.query_to_list(
                 """
@@ -232,7 +242,8 @@ class Window(SetUpWindow):
         self.list_w_norm.clear()
         self.list_w_norm.addItems([item for item in result])
 
-    def update_list_w_size_1(self):
+    def update_list_w_size_1(self) -> None:
+        """Fills second ListWidgets."""
         self.actual = Position(norm=self.list_w_norm.currentItem().text())
         with Sqlite() as sql:
             result = sql.query_to_list(
@@ -246,7 +257,12 @@ class Window(SetUpWindow):
         self.list_w_size2.clear()
         self.list_w_size1.addItems([str(item) for item in result])
 
-    def update_list_w_size_2(self):
+    def update_list_w_size_2(self) -> None:
+        """Fills third WidgetList.
+
+        If positions have only one size then
+        fill info about it and allows."""
+
         self.actual.size1 = self.list_w_size1.currentItem().text()
         with Sqlite() as sql:
             results = sql.query_to_list(
@@ -268,7 +284,8 @@ class Window(SetUpWindow):
         else:
             self.list_w_size2.addItems(results)
 
-    def update_info_item(self, size2=None):
+    def update_info_item(self, size2=None) -> None:
+        """Manages display info about a position."""
         self.line_w_quick_calc.clear()
         if size2 is not None:
             self.actual.size2 = size2
@@ -279,7 +296,8 @@ class Window(SetUpWindow):
         self.label_info_kg_to_100szt.setText(f'{self.actual.calc_kg_to_100szt:.3f}')
         self.enable_info()
 
-    def enable_info(self):
+    def enable_info(self) -> None:
+        """Activates calculation options for a position."""
         # self.btn_update_position.setEnabled(True)
         self.line_edit_100szt_kg_weight.setEnabled(True)
         self.line_edit_kg_100szt_weight.setEnabled(True)
@@ -292,7 +310,8 @@ class Window(SetUpWindow):
         self.line_edit_100szt_kg_price.clear()
         self.line_edit_kg_100szt_price.clear()
 
-    def update_info_from_quick_calc(self, string):
+    def update_info_from_quick_calc(self, string: str) -> None:
+        """Manages behavior for quick_calc option."""
         try:
             self.list_w_size2.clear()
             self.list_w_size1.clear()
@@ -306,7 +325,21 @@ class Window(SetUpWindow):
         except Exception as e:
             print(e)
 
-    def weight_converter(self, widget: str, string: str):
+    def weight_converter(self, widget: str, string: str) -> None:
+        """Handle event for weight conversion.
+
+        Args:
+            widget: indicate direction of convertion
+                allows(to_kg, to_szt)
+            string: value to confert in string format
+
+        Raises:
+            TypeError: If wrong widget variable
+
+        """
+
+        if widget not in ['to_kg', 'to_szt']:
+            raise TypeError
         try:
             convert = tools.str_to_number(string)
             if widget == 'to_kg':
@@ -321,6 +354,20 @@ class Window(SetUpWindow):
             print(e)
 
     def price_converter(self, widget: str, string: str):
+        """Handle event for price conversion.
+
+        Args:
+            widget: indicate direction of convertion
+                allows(to_kg, to_szt)
+            string: value to confert in string format
+
+        Raises:
+            TypeError: If wrong widget variable
+
+        """
+
+        if widget not in ['to_kg', 'to_szt']:
+            raise TypeError
         try:
             convert = tools.str_to_number(string)
             if widget == 'to_kg':
@@ -335,6 +382,7 @@ class Window(SetUpWindow):
             print(e)
 
     def weight_query(self) -> float:
+        """Quary database about weight of the position."""
         with Sqlite() as sql:
             if self.actual.size2 == '':
                 size2 = 'is NULL'

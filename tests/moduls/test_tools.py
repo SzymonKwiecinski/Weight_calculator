@@ -1,9 +1,9 @@
-import pytest
+from pytest import mark
 from src.moduls.tools import quick_sort, str_to_number
 
 
-
-@pytest.mark.parametrize('test, expected, type',
+@mark.tools
+@mark.parametrize('test, expected, type',
     [
         (
             ['DIN125', 'PN82005', 'ISO1234', 'DIN94','ISO7380-1'],
@@ -36,7 +36,8 @@ def test_quick_sort_with_str(test, expected, type):
     assert argument == expected
 
 
-@pytest.mark.parametrize('test, expected',
+@mark.tools
+@mark.parametrize('test, expected',
     [
         ('100', 100),
         ('12.23', 12.23),

@@ -76,7 +76,8 @@ class Sqlite:
         2.Fetches everything from cursor and put it to list.
 
         Resturn:
-            list: results from query inquary
+            list: results from query
+                ONLY FIRST COLUMN!!!
         """
 
         self.__query(sql_str)
