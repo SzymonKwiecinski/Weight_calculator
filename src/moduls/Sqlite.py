@@ -1,64 +1,86 @@
-import sys
-import os
 import sqlite3
 from sqlite3 import Error
 import traceback
-sys.path.append(f'{os.path.abspath("")}\\venv')
-sys.path.append(f'{os.path.abspath("")}\\venv\\Scripts')
-sys.path.append(f'{os.path.abspath("")}\\venv\\Lib\\site-packages')
 
 
 class Sqlite:
+    """Manages conection with sqlite database.
 
-    def __init__(self, sqlite3_db=None) -> None:
+    Attributes:
+        sqlite_db: the name od slqlite database
+            Which is is located in main folder
+        conn: sqlite connection object
+        cursor: sqlite cursor object
+
+    Methods:
+        query_to_list: Execute query and return list
+
+    """
+    def __init__(self, sqlite3_db: str = None) -> None:
         if sqlite3_db is None:
             self.sqlite3_db = 'sqlite.db'
         else:
             self.sqlite3_db = sqlite3_db
 
     def __enter__(self):
-        return self.create_connection()
+        return self.__create_connection()
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        self.close_connection()
+        self.__close_connection()
 
-    def create_connection(self):
+    def __create_connection(self):
+        """Creates connection with database."""
         try:
             self.conn = sqlite3.connect(self.sqlite3_db)
             self.cursor = self.conn.cursor()
-            print(f'{self.sqlite3_db} - connect')
             return self
         except Error:
             traceback.print_exc()
             return None
 
-    def close_connection(self):
+    def __close_connection(self) -> None:
+        """Close connection with database."""
         try:
             self.cursor.close()
-            print(f'{self.sqlite3_db} cursor close')
-        except Error:
-            traceback.print_exc()
-        try:
             self.conn.close()
-            print(f'{self.sqlite3_db} connection close')
         except Error:
             traceback.print_exc()
 
-    def query(self, sql_str: str):
+    def __query(self, sql_str: str):
+        """Executes sql query on connected database.
+
+        Args:
+            sql_str: sql query as a string
+        """
+
         try:
             self.cursor.execute(sql_str)
         except Exception:
             traceback.print_exc()
 
-    def _query_to_list(self):
+    def __query_to_list(self):
+        """Fetches everything from cursor and put it to list.
+
+        Resturn:
+            list: results from query inquary
+        """
         try:
             return [item[0] for item in self.cursor]
         except Error:
             traceback.print_exc()
 
     def query_to_list(self, sql_str: str):
-        self.query(sql_str)
-        return self._query_to_list()
+        """Connect '__query' and '__query_to_list' methods.
+
+        1.Executes sql query on connected database.
+        2.Fetches everything from cursor and put it to list.
+
+        Resturn:
+            list: results from query inquary
+        """
+
+        self.__query(sql_str)
+        return self.__query_to_list()
 
     #############
     # def create_table(self, query):

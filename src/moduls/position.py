@@ -1,4 +1,22 @@
 class Position:
+    """Manages position attributes and methods
+
+    Holds details about position in order to
+    make operation on it and display in GUI
+    interafec.
+    In short is response for all logic.
+
+    Attributes:
+        norm: Norm or text describe product e.g. DIN933
+        size1: First size of product e.g. 12
+        size2: Second size of product e.g. 70
+        weight: Weight of product e.g. 345.34
+        full_name: e.g. DIN933 M12x70
+        calc_kg_to_100szt: number allows to convert ? from kg to 100szt
+        calc_100szt_to_kg: number allows to convert ? from 100szt to kg
+        weight_kg_per_1000szt: weight of product per 1000szt
+
+    """
 
     def __init__(self, norm: str = '', size1: str = '', size2: str = '', weight: float = 0) -> None:
         self.norm = norm
@@ -7,7 +25,7 @@ class Position:
         self.weight = weight
 
     @property
-    def norm(self):
+    def norm(self) -> str:
         return self.__norm
 
     @norm.setter
@@ -21,7 +39,7 @@ class Position:
         self.norm = ''
 
     @property
-    def size1(self):
+    def size1(self) -> str:
         return self.__size1
 
     @size1.setter
@@ -35,15 +53,13 @@ class Position:
         self.size1 = ''
 
     @property
-    def size2(self):
+    def size2(self) -> str:
         return self.__size2
 
     @size2.setter
     def size2(self, size2):
         if isinstance(size2, tuple):
             size2 = size2[0]
-        # if size2 == '':
-        #     self.__size2 = 'NULL'
         self.__size2 = size2
 
     @size2.deleter
@@ -51,7 +67,8 @@ class Position:
         self.size2 = ''
 
     @property
-    def weight(self):
+    def weight(self) -> float | int:
+        print(1)
         return self.__weight
 
     @weight.setter
@@ -63,24 +80,24 @@ class Position:
             self.__weight = 0
 
     @property
-    def full_name(self):
+    def full_name(self) -> str:
         if self.__size2 == '':
             return f'{self.__norm}  {self.__size1}'
         else:
             return f'{self.__norm}  {self.__size1}x{self.__size2}'
 
     @property
-    def calc_kg_to_100szt(self):
+    def calc_kg_to_100szt(self) -> float:
         val = self.__weight * (100 / 1000)
         return val
 
     @property
-    def calc_100szt_to_kg(self):
+    def calc_100szt_to_kg(self) -> float:
         val = (1000 / 100) * (1 / self.__weight)
         return val
 
     @property
-    def weight_kg_per_1000szt(self):
+    def weight_kg_per_1000szt(self) -> str:
         return str(self.__weight) + ' kg/1000szt.'
 
     def __repr__(self) -> str:

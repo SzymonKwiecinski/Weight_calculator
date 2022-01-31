@@ -10,11 +10,23 @@ def quick_sort(arr: list, type: str = 'number') -> list:
     in each string
 
     Args:
-        arr (list):
-        type (str): 'str' or 'number'
+        arr: A list of strings or numbers
+        type(optional): 'str' if the list contain only strings
+            'number' if the list cointain onlu numbers
 
     Returns:
         list
+
+    Raises:
+        TypeError: If you type wrong type
+
+    Examples:
+        >>> print(quick_sort(['DIN123, DIN92'], 'string'))
+        ['DIN92', 'DIN123']
+
+        >>> print(quick_sort([234.6, 56], 'number'))
+        [56, 234.6]
+
     """
 
     if type not in ['str', 'number']:
@@ -69,12 +81,15 @@ def str_to_number(string: str) -> int | float:
         string (str)
 
     Returns:
-        float | int: converted sting
-        0: if do not find number in string
+        float | int: converted string
+            or 0 if do not find number in string
 
     Examples:
-        >>> str_to_number('234,23')
+        >>> print(str_to_number('234,23'))
         234.23
+
+        >>> print(str_to_number('kot'))
+        0
 
     """
     pattern = r'[0-9,.]+'

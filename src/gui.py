@@ -1,13 +1,6 @@
 import sys
-import os
-sys.path.insert(0, os.path.abspath(".."))
-sys.path.insert(1, f'{os.path.abspath("..")}\\venv')
-sys.path.insert(2, f'{os.path.abspath("..")}\\venv\\Scripts')
-sys.path.insert(3, f'{os.path.abspath("..")}\\venv\\Lib\\site-packages')
-
 from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QTabWidget
 from PyQt6.QtWidgets import QLabel, QPushButton, QListWidget, QLineEdit, QGridLayout
-# from PyQt6.QtGui import *
 from PyQt6.QtCore import Qt, QSize
 from src.moduls.position import Position
 from src.moduls.sqlite import Sqlite
