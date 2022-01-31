@@ -17,7 +17,9 @@ jobs:
         pip install -e .
         pip install pytest
         pip install flake8
+    - name: Check all dependeccies
+      run: pip list
     - name: Test with pytest
-      run: pytest -v
+      run: pytest -vs
     - name: Test with flake8
       run: flake8 src
