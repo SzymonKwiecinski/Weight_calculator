@@ -28,8 +28,8 @@ def quick_sort(arr: list, type: str = 'number') -> list:
         if lenght <= 1:
             return arr
         else:
-            pivot_int = int(re.search('[0-9]+', arr[lenght-1]).group())
-            pivot_str = arr.pop(lenght-1)
+            pivot_int = int(re.search('[0-9]+', arr[lenght - 1]).group())
+            pivot_str = arr.pop(lenght - 1)
 
             table_int = [int(re.search('[0-9]+', din).group()) for din in arr]
             table_str = arr
@@ -50,7 +50,7 @@ def quick_sort(arr: list, type: str = 'number') -> list:
         if lenght <= 1:
             return arr
         else:
-            pivot = arr.pop(lenght-1)
+            pivot = arr.pop(lenght - 1)
 
             for item in arr:
 

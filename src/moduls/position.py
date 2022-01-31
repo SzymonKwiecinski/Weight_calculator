@@ -71,12 +71,12 @@ class Position:
 
     @property
     def calc_kg_to_100szt(self):
-        val = self.__weight * (100/1000)
+        val = self.__weight * (100 / 1000)
         return val
 
     @property
     def calc_100szt_to_kg(self):
-        val = (1000/100) * (1/self.__weight)
+        val = (1000 / 100) * (1 / self.__weight)
         return val
 
     @property
