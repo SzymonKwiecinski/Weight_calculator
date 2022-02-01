@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath("src"))
 from pytest import fixture, mark
 from src.moduls.sqlite import Sqlite
 from src.moduls.position import Position
