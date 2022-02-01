@@ -1,10 +1,10 @@
 import sys
 import os
+print(os.system('pip list'))
 sys.path.insert(0, os.path.abspath("src"))
 from pytest import fixture, mark
-from src.moduls.position import Position
-from src.moduls.sqlite import Sqlite
-
+from src.position import Position
+from src.sqlite import Sqlite
 
 @fixture(scope='session')
 def sql():

@@ -1,5 +1,5 @@
 from pytest import mark
-from src.moduls.tools import quick_sort, str_to_number
+from src.tools import quick_sort, str_to_number
 
 
 @mark.tools

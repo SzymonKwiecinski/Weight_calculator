@@ -2,9 +2,9 @@ import sys
 from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QTabWidget
 from PyQt6.QtWidgets import QLabel, QPushButton, QListWidget, QLineEdit, QGridLayout
 from PyQt6.QtCore import Qt, QSize
-from src.moduls.position import Position
-from src.moduls.sqlite import Sqlite
-from src.moduls import tools
+from src.position import Position
+from src.sqlite import Sqlite
+from src import tools
 
 STYLE = """
     QPushButton {font: bold 12px;}
