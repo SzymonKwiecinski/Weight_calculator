@@ -1,7 +1,4 @@
-import string
 import traceback
-
-from pyparsing import NoMatch
 
 
 class Position:
@@ -37,9 +34,8 @@ class Position:
     @norm.setter
     def norm(self, norm):
         if isinstance(norm, tuple):
-            self.__norm = norm[0]
-        elif isinstance(norm, string):
-            self.__norm = norm
+            norm = norm[0]
+        self.__norm = norm
 
     @norm.deleter
     def norm(self):
