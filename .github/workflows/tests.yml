@@ -21,6 +21,6 @@ jobs:
       run: pip list
     - name: Test with pytest
       # run: pytest -vs
-      run: python -m pytest tests
+      run: python -m pytest tests -vs
     - name: Test with flake8
       run: flake8 src
