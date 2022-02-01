@@ -10,4 +10,7 @@ CREATE TABLE waga(
 )
 ```
 
-
+# TODO Now
+  * [] tests for position
+  * [] tests for gui
+  * [] beautiful README
