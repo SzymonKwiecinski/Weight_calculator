@@ -20,6 +20,7 @@ jobs:
     - name: Check all dependeccies
       run: pip list
     - name: Test with pytest
-      run: pytest -vs
+      # run: pytest -vs
+      run: python -m pytest tests
     - name: Test with flake8
       run: flake8 src
