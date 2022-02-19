@@ -24,8 +24,7 @@ class SetUpWindow(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint
-                            | Qt.WindowType.WindowMinimizeButtonHint
+        self.setWindowFlags(Qt.WindowType.WindowMinimizeButtonHint
                             | Qt.WindowType.WindowCloseButtonHint)
 
         self.db_log = 'sqlite.db'
@@ -56,6 +55,11 @@ class Window(SetUpWindow):
         self.layout_page_1.setContentsMargins(1, 1, 1, 1)
         self.widget_page_1.setLayout(self.layout_page_1)
         self.tab.addTab(self.widget_page_1, 'Waga')
+        ## START button activate always top 
+        self.btn_stay_on_top = QPushButton('Zatrzymaj zawsze widoczny') # Zatrzymaj zawsze na samej górze
+        self.layout_page_1.addWidget(self.btn_stay_on_top)
+        self.btn_stay_on_top.clicked.connect(self.change_state_of_window)
+        ## END button activate always top
         ## START layout_up
         self.layout_up = QHBoxLayout()
         self.layout_page_1.addLayout(self.layout_up)
@@ -84,7 +88,7 @@ class Window(SetUpWindow):
         self.layout_size1.addWidget(self.list_w_size1)
         self.layout_up.addLayout(self.layout_size1)
         ### END layout_size1
-        ### START layout_size1
+        ### START layout_size2
         self.layout_size2 = QVBoxLayout()
         self.label_size_2 = QLabel('Wymiar 2')
         self.label_size_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -97,7 +101,7 @@ class Window(SetUpWindow):
         self.list_w_size2.setMinimumSize(QSize(80, 100))
         self.layout_size2.addWidget(self.list_w_size2)
         self.layout_up.addLayout(self.layout_size2)
-        ### END layout_size1
+        ### END layout_size2
         ## END layout_up
         ## START layout_down
         self.layout_down = QVBoxLayout()
@@ -397,6 +401,23 @@ class Window(SetUpWindow):
                         AND waga_Rozmiar2 {size2}
                 """)
         return results[0]
+
+    def change_state_of_window(self) -> None:
+        """Changes visibility of window.
+        
+        Allows either set window to be always on top or not
+        """
+
+        if self.btn_stay_on_top.text() == 'Schowaj kalkulator':
+            self.btn_stay_on_top.setText('Zatrzymaj zawsze widoczny')
+            self.setWindowFlags(Qt.WindowType.WindowCloseButtonHint|Qt.WindowType.WindowMinimizeButtonHint|Qt.WindowType.WindowSystemMenuHint|Qt.WindowType.WindowTitleHint|Qt.WindowType.Window)
+            self.show()
+        elif self.btn_stay_on_top.text() == 'Zatrzymaj zawsze widoczny':
+            self.btn_stay_on_top.setText('Schowaj kalkulator')
+            self.setWindowFlags(Qt.WindowType.WindowCloseButtonHint|Qt.WindowType.WindowMinimizeButtonHint|Qt.WindowType.WindowSystemMenuHint|Qt.WindowType.WindowTitleHint|Qt.WindowType.Window)
+            self.setWindowFlags(Qt.WindowType.WindowCloseButtonHint|Qt.WindowType.WindowStaysOnTopHint|Qt.WindowType.WindowMinimizeButtonHint|Qt.WindowType.WindowSystemMenuHint|Qt.WindowType.WindowTitleHint|Qt.WindowType.Window)
+            self.show()
+
 
     # def btn_add_new_position_func(self):
     #    self.add_window = WindowAddPosition()
