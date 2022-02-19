@@ -1,4 +1,6 @@
- 
+ # Weight calculator for fasteners industry
+![Tests](https://github.com/SzymonKwiecinski/Weight_calculator/actions/workflows/tests.yml/badge.svg)
+
 
 ```sql
 CREATE TABLE waga(
