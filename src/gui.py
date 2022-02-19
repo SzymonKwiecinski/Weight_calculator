@@ -55,8 +55,8 @@ class Window(SetUpWindow):
         self.layout_page_1.setContentsMargins(1, 1, 1, 1)
         self.widget_page_1.setLayout(self.layout_page_1)
         self.tab.addTab(self.widget_page_1, 'Waga')
-        ## START button activate always top 
-        self.btn_stay_on_top = QPushButton('Zatrzymaj zawsze widoczny') # Zatrzymaj zawsze na samej górze
+        ## START button activate always top
+        self.btn_stay_on_top = QPushButton('Zatrzymaj zawsze widoczny')
         self.layout_page_1.addWidget(self.btn_stay_on_top)
         self.btn_stay_on_top.clicked.connect(self.change_state_of_window)
         ## END button activate always top
@@ -166,39 +166,39 @@ class Window(SetUpWindow):
         self.layout_converion.setHorizontalSpacing(0)
         self.layout_converion.setContentsMargins(0, 0, 0, 0)
         self.layout_down.addLayout(self.layout_converion)
-        self.line_edit_100szt_kg_weight = QLineEdit()
-        self.line_edit_100szt_kg_weight.setEnabled(False)
-        self.line_edit_100szt_kg_weight.textEdited\
+        self.line_edit_kg_weight = QLineEdit()
+        self.line_edit_kg_weight.setEnabled(False)
+        self.line_edit_kg_weight.textEdited\
             .connect(lambda: self.weight_converter(
                 'to_szt',
-                self.line_edit_100szt_kg_weight.text()))
-        self.line_edit_kg_100szt_weight = QLineEdit()
-        self.line_edit_kg_100szt_weight.setEnabled(False)
-        self.line_edit_kg_100szt_weight.textEdited\
+                self.line_edit_kg_weight.text()))
+        self.line_edit_szt_weight = QLineEdit()
+        self.line_edit_szt_weight.setEnabled(False)
+        self.line_edit_szt_weight.textEdited\
             .connect(lambda: self.weight_converter(
                 'to_kg',
-                self.line_edit_kg_100szt_weight.text()))
-        self.line_edit_100szt_kg_price = QLineEdit()
-        self.line_edit_100szt_kg_price.textEdited\
+                self.line_edit_szt_weight.text()))
+        self.line_edit_kg_price = QLineEdit()
+        self.line_edit_kg_price.textEdited\
             .connect(lambda: self.price_converter(
                 'to_szt',
-                self.line_edit_100szt_kg_price.text()))
-        self.line_edit_100szt_kg_price.setEnabled(False)
-        self.line_edit_kg_100szt_price = QLineEdit()
-        self.line_edit_kg_100szt_price.textEdited\
+                self.line_edit_kg_price.text()))
+        self.line_edit_kg_price.setEnabled(False)
+        self.line_edit_100szt_price = QLineEdit()
+        self.line_edit_100szt_price.textEdited\
             .connect(lambda: self.price_converter(
                 'to_kg',
-                self.line_edit_kg_100szt_price.text()))
-        self.line_edit_kg_100szt_price.setEnabled(False)
-        self.layout_converion.addWidget(self.line_edit_100szt_kg_weight, 0, 0)
+                self.line_edit_100szt_price.text()))
+        self.line_edit_100szt_price.setEnabled(False)
+        self.layout_converion.addWidget(self.line_edit_kg_weight, 0, 0)
         self.layout_converion.addWidget(QLabel(' kg '), 0, 1)
         self.layout_converion.addWidget(QLabel(' = '), 0, 2)
-        self.layout_converion.addWidget(self.line_edit_kg_100szt_weight, 0, 3)
+        self.layout_converion.addWidget(self.line_edit_szt_weight, 0, 3)
         self.layout_converion.addWidget(QLabel(' sztuk '), 0, 4)
-        self.layout_converion.addWidget(self.line_edit_100szt_kg_price, 1, 0)
+        self.layout_converion.addWidget(self.line_edit_kg_price, 1, 0)
         self.layout_converion.addWidget(QLabel(' zł/kg '), 1, 1)
         self.layout_converion.addWidget(QLabel(' = '), 1, 2)
-        self.layout_converion.addWidget(self.line_edit_kg_100szt_price, 1, 3)
+        self.layout_converion.addWidget(self.line_edit_100szt_price, 1, 3)
         self.layout_converion.addWidget(QLabel(' zł/100szt '), 1, 4)
         ### END layout_conversion
         ### START layout_buttons
@@ -303,16 +303,16 @@ class Window(SetUpWindow):
     def enable_info(self) -> None:
         """Activates calculation options for a position."""
         # self.btn_update_position.setEnabled(True)
-        self.line_edit_100szt_kg_weight.setEnabled(True)
-        self.line_edit_kg_100szt_weight.setEnabled(True)
-        self.line_edit_100szt_kg_price.setEnabled(True)
-        self.line_edit_kg_100szt_price.setEnabled(True)
+        self.line_edit_kg_weight.setEnabled(True)
+        self.line_edit_szt_weight.setEnabled(True)
+        self.line_edit_kg_price.setEnabled(True)
+        self.line_edit_100szt_price.setEnabled(True)
         self.btn_info_100szt_to_kg.setEnabled(True)
         self.btn_info_kg_to_100szt.setEnabled(True)
-        self.line_edit_100szt_kg_weight.clear()
-        self.line_edit_kg_100szt_weight.clear()
-        self.line_edit_100szt_kg_price.clear()
-        self.line_edit_kg_100szt_price.clear()
+        self.line_edit_kg_weight.clear()
+        self.line_edit_szt_weight.clear()
+        self.line_edit_kg_price.clear()
+        self.line_edit_100szt_price.clear()
 
     def update_info_from_quick_calc(self, string: str) -> None:
         """Manages behavior for quick_calc option."""
@@ -347,12 +347,12 @@ class Window(SetUpWindow):
         try:
             convert = tools.str_to_number(string)
             if widget == 'to_kg':
-                self.line_edit_100szt_kg_weight.setText(
-                    str(f'{(convert / self.actual.calc_100szt_to_kg / 100):.3f}')
+                self.line_edit_kg_weight.setText(
+                    self.actual.convert_weight_from_szt_to_kg(szt=convert)
                 )
             if widget == 'to_szt':
-                self.line_edit_kg_100szt_weight.setText(
-                    str(f'{int(convert / self.actual.calc_kg_to_100szt * 100)}')
+                self.line_edit_szt_weight.setText(
+                    self.actual.convert_weight_from_kg_to_szt(kg=convert)
                 )
         except Exception as e:
             print(e)
@@ -375,12 +375,12 @@ class Window(SetUpWindow):
         try:
             convert = tools.str_to_number(string)
             if widget == 'to_kg':
-                self.line_edit_100szt_kg_price.setText(
-                    str(f'{(convert * self.actual.calc_100szt_to_kg):.2f}')
+                self.line_edit_kg_price.setText(
+                    self.actual.convert_price_from_100szt_to_kg(szt100=convert)
                 )
             if widget == 'to_szt':
-                self.line_edit_kg_100szt_price.setText(
-                    str(f'{(convert * self.actual.calc_kg_to_100szt):.2f}')
+                self.line_edit_100szt_price.setText(
+                    self.actual.convert_price_from_kg_to_100szt(kg=convert)
                 )
         except Exception as e:
             print(e)
@@ -404,20 +404,31 @@ class Window(SetUpWindow):
 
     def change_state_of_window(self) -> None:
         """Changes visibility of window.
-        
+
         Allows either set window to be always on top or not
         """
 
         if self.btn_stay_on_top.text() == 'Schowaj kalkulator':
             self.btn_stay_on_top.setText('Zatrzymaj zawsze widoczny')
-            self.setWindowFlags(Qt.WindowType.WindowCloseButtonHint|Qt.WindowType.WindowMinimizeButtonHint|Qt.WindowType.WindowSystemMenuHint|Qt.WindowType.WindowTitleHint|Qt.WindowType.Window)
+            self.setWindowFlags(
+                Qt.WindowType.WindowCloseButtonHint
+                | Qt.WindowType.WindowMinimizeButtonHint
+                | Qt.WindowType.WindowSystemMenuHint
+                | Qt.WindowType.WindowTitleHint
+                | Qt.WindowType.Window
+            )
             self.show()
         elif self.btn_stay_on_top.text() == 'Zatrzymaj zawsze widoczny':
             self.btn_stay_on_top.setText('Schowaj kalkulator')
-            self.setWindowFlags(Qt.WindowType.WindowCloseButtonHint|Qt.WindowType.WindowMinimizeButtonHint|Qt.WindowType.WindowSystemMenuHint|Qt.WindowType.WindowTitleHint|Qt.WindowType.Window)
-            self.setWindowFlags(Qt.WindowType.WindowCloseButtonHint|Qt.WindowType.WindowStaysOnTopHint|Qt.WindowType.WindowMinimizeButtonHint|Qt.WindowType.WindowSystemMenuHint|Qt.WindowType.WindowTitleHint|Qt.WindowType.Window)
+            self.setWindowFlags(
+                Qt.WindowType.WindowCloseButtonHint
+                | Qt.WindowType.WindowStaysOnTopHint
+                | Qt.WindowType.WindowMinimizeButtonHint
+                | Qt.WindowType.WindowSystemMenuHint
+                | Qt.WindowType.WindowTitleHint
+                | Qt.WindowType.Window
+            )
             self.show()
-
 
     # def btn_add_new_position_func(self):
     #    self.add_window = WindowAddPosition()

@@ -107,6 +107,53 @@ class Position:
     def weight_kg_per_1000szt(self) -> str:
         return str(self.__weight) + ' kg/1000szt.'
 
+    def convert_weight_from_kg_to_szt(self, kg: int | float) -> str:
+        """Converts units from 'kg' to 'szt'.
+
+        Args:
+            kg (int|float): quantity in kg unit
+
+        Returns:
+            str: converted quantity in szt unit
+
+        """
+        return str(f'{int(kg / self.calc_kg_to_100szt * 100)}')
+
+    def convert_weight_from_szt_to_kg(self, szt: int | float) -> str:
+        """Converts units from 'szt' to 'kg'.
+
+        Args:
+            szt (int|float): quantity in szt unit
+
+        Returns:
+            str: converted quantity in kg unit
+        """
+        return str(f'{(szt / self.calc_100szt_to_kg / 100):.3f}')
+
+    def convert_price_from_kg_to_100szt(self, kg: int | float) -> str:
+        """Converts price from 'kg' to '100szt' per zł.
+
+        Args:
+            kg (int|float): price for zł/kg
+
+        Returns:
+            str: converted price to zł/100szt
+        """
+
+        return str(f'{(kg * self.calc_kg_to_100szt):.2f}')
+
+    def convert_price_from_100szt_to_kg(self, szt100: int | float) -> str:
+        """Converts price from '100szt' to 'kg' per zł.
+
+        Args:
+            kg (int|float): price for zł/100szt
+
+        Returns:
+            str: converted price to zł/kg
+        """
+
+        return str(f'{(szt100 * self.calc_100szt_to_kg):.2f}')
+
     def __repr__(self) -> str:
         str_repl = (
             f"norm: {self.norm}\n"

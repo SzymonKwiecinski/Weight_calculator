@@ -14,7 +14,6 @@ def sql():
 
 @fixture(scope='session', params=[
     ('DIN931', '10', '55', 43.8),
-    ('DIN931', '10', '55', 0)
 ])
 def position(request):
     norm, size1, size2, weight = request.param
