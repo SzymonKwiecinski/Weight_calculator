@@ -40,7 +40,6 @@ class Window(SetUpWindow):
         self.ui()
 
     def ui(self):
-
         # START layout_main
         self.layout_main = QVBoxLayout()
         self.layout_main.setContentsMargins(0, 0, 0, 0)

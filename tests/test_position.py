@@ -1,11 +1,7 @@
-from multiprocessing.context import assert_spawning
 from pytest import mark, approx
 from src.position import Position
 
 
-# @mark.parametrize('norm, size1, size2, weight, _100szt_kg, kg_100szt',[
-#     ('DIN931', '10.0', '55', 43.8, 0.228, 4.38)
-# ])
 @mark.position
 class PositionTests:
 
