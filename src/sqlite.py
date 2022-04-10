@@ -83,6 +83,12 @@ class Sqlite:
         self.__query(sql_str)
         return self.__query_to_list()
 
+    def query_all(self, sql_str):
+        try:
+            self.__query(sql_str)
+            return [item for item in self.cursor]
+        except Error:
+            traceback.print_exc()
     #############
     # def create_table(self, query):
     #     """ create a table from the create_table_sql statement

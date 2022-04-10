@@ -3,3 +3,8 @@ sqlite-tools*
 *__pycache__*
 __pycache__*
 *.egg-info
+conceps
+conceps/
+SQLiteStudio
+SQLiteStudio/
+normy/*

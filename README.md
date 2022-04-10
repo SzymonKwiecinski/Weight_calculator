@@ -1,11 +1,13 @@
  # Weight calculator for fasteners industry
 ![Tests](https://github.com/SzymonKwiecinski/Weight_calculator/actions/workflows/tests.yml/badge.svg)  
-[YouTube movie presentation](https://youtu.be/Jvrw1lSTFWY)
+# Presentation
+* [YouTube movie presentation](https://youtu.be/Jvrw1lSTFWY)
 
 
-# TODO
+# TO DO
   * [x] tests for position
   * [x] tests for gui
+  * [ ] Database for norms [name, din, iso, pn, file_path]
   * [ ] beautiful README
 
 # Nice links

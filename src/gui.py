@@ -1,6 +1,7 @@
 import sys
-from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QTabWidget
-from PyQt6.QtWidgets import QLabel, QPushButton, QListWidget, QLineEdit, QGridLayout
+from unittest import result
+from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QTabWidget, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QPushButton, QListWidget, QLineEdit, QGridLayout, QComboBox, QFormLayout
 from PyQt6.QtCore import Qt, QSize
 from src.position import Position
 from src.sqlite import Sqlite
@@ -8,11 +9,11 @@ from src import tools
 
 STYLE = """
     QPushButton {font: bold 12px;}
-    QLabel {background-color: #ffffff;
+    QLabel {background-color: #e0e0e0;
             border-radius: 5px;
             font: bold 12px;}
     QListWidget {font: bold 12px;}"""
-
+            # padding: 0.5px;}
 
 class SetUpWindow(QWidget):
     """Class parent for all my windows.
@@ -40,25 +41,22 @@ class Window(SetUpWindow):
         self.ui()
 
     def ui(self):
-        # START layout_main
         self.layout_main = QVBoxLayout()
         self.layout_main.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout_main)
-
+        # START button activate always top
+        self.btn_stay_on_top = QPushButton('Zatrzymaj zawsze widoczny')
+        self.layout_main.addWidget(self.btn_stay_on_top)
+        self.btn_stay_on_top.clicked.connect(self.change_state_of_window)
+        # END button activate always top
         self.tab = QTabWidget()
-        # self.tab.setTabPosition(2)
         self.layout_main.addWidget(self.tab)
-
+        # START page1
         self.widget_page_1 = QWidget()
         self.layout_page_1 = QVBoxLayout()
         self.layout_page_1.setContentsMargins(1, 1, 1, 1)
         self.widget_page_1.setLayout(self.layout_page_1)
         self.tab.addTab(self.widget_page_1, 'Waga')
-        ## START button activate always top
-        self.btn_stay_on_top = QPushButton('Zatrzymaj zawsze widoczny')
-        self.layout_page_1.addWidget(self.btn_stay_on_top)
-        self.btn_stay_on_top.clicked.connect(self.change_state_of_window)
-        ## END button activate always top
         ## START layout_up
         self.layout_up = QHBoxLayout()
         self.layout_page_1.addLayout(self.layout_up)
@@ -78,7 +76,7 @@ class Window(SetUpWindow):
         ### START layout_size1
         self.layout_size1 = QVBoxLayout()
         self.label_size_1 = QLabel('Wymiar 1')
-        self.label_size_1.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.label_size_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout_size1.addWidget(self.label_size_1)
         self.list_w_size1 = QListWidget()
         self.list_w_size1.itemClicked.connect(self.update_list_w_size_2)
@@ -219,12 +217,42 @@ class Window(SetUpWindow):
 
         ### END layout_buttons
         ## END layout_down
-        # END layout_main
+        # END page1
 
-        self.widget_page_3 = QWidget()
-        self.layout_page_3 = QVBoxLayout()
-        self.widget_page_3.setLayout(self.layout_page_3)
-        self.tab.addTab(self.widget_page_3, 'DIN/ISO/PN')
+        # START page2
+        self.widget_page_2 = QWidget()
+        self.layout_page_2 = QFormLayout()
+        self.widget_page_2.setLayout(self.layout_page_2)
+        self.tab.addTab(self.widget_page_2, 'DIN/ISO/PN')
+        self.label_1_p2 = QLabel('Nazwa długa normy')
+        self.label_1_p2.setWordWrap(True)
+        self.label_din_p2 = QLabel('DIN')
+        self.label_pn_p2 = QLabel('PN')
+        self.label_iso_p2 = QLabel('ISO')
+        self.combo_box_din_p2 = QComboBox()
+        self.combo_box_din_p2.textActivated.connect(self.combo_box_din_func_p2)
+        self.combo_box_iso_p2 = QComboBox()
+        self.combo_box_iso_p2.textActivated.connect(self.combo_box_iso_func_p2)
+        self.combo_box_pn_p2 = QComboBox()
+        self.combo_box_pn_p2.textActivated.connect(self.combo_box_pn_func_p2)
+        self.btn_norma_p2 = QPushButton('Otwórz katalog/normę')
+        # self.combo_box_1_p2.addItems([str(x) for x in range(100)])
+        self.populate_norm_list()
+
+        # self.label_1_p2.setAlignment(Qt.AlignmentFlag.AlignTop)
+        # self.label_1_p2.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed))
+        self.layout_page_2.addRow(self.label_1_p2)
+        self.layout_page_2.addRow(self.label_din_p2, self.combo_box_din_p2)
+        self.layout_page_2.addRow(self.label_pn_p2, self.combo_box_iso_p2)
+        self.layout_page_2.addRow(self.label_iso_p2, self.combo_box_pn_p2)
+        self.layout_page_2.addRow(self.btn_norma_p2)
+
+        # self.layout_page_2.addWidget(self.label_1_p2, 0, 0)
+        # self.layout_page_2.addWidget(self.combo_box_1_p2, 1, 0)
+
+
+        # END page2
+
 
         self.show()
         # turn off resizing
@@ -430,6 +458,62 @@ class Window(SetUpWindow):
                 | Qt.WindowType.Window
             )
             self.show()
+
+    def populate_norm_list(self):
+        """Populate all norm fields"""
+        norms = {
+            'din': ['normy_Din', self.combo_box_din_p2],
+            'pn': ['normy_Pn', self.combo_box_pn_p2],
+            'iso': ['normy_Iso', self.combo_box_iso_p2]}
+        with Sqlite() as sql:
+            for norm in norms.values():
+                results = sql.query_to_list(
+                    f"""SELECT
+                            DISTINCT {norm[0]}
+                        FROM normy
+                        WHERE
+                            {norm[0]} is not NULL
+                            AND {norm[0]} <> ''
+                    """
+                )
+                results = tools.quick_sort(results, type='str')
+                norm[1].addItem('')
+                norm[1].addItems(results)
+
+    def combo_box_din_func_p2(self, selected):
+        results = self.select_one_row(selected, 'Din')
+        self.combo_box_iso_p2.setCurrentText(results[0][2])
+        self.combo_box_pn_p2.setCurrentText(results[0][3])
+        self.label_1_p2.setText(results[0][0])
+
+    def combo_box_iso_func_p2(self, selected):
+        results = self.select_one_row(selected, 'Iso')
+        self.combo_box_din_p2.setCurrentText(results[0][1])
+        self.combo_box_pn_p2.setCurrentText(results[0][3])
+        self.label_1_p2.setText(results[0][0])
+
+    def combo_box_pn_func_p2(self, selected):
+        results = self.select_one_row(selected, 'Pn')
+        self.combo_box_iso_p2.setCurrentText(results[0][2])
+        self.combo_box_din_p2.setCurrentText(results[0][1])
+        self.label_1_p2.setText(results[0][0])
+
+    def select_one_row(self, selected, column):
+        with Sqlite() as sql:
+            query = sql.query_all(
+                f"""SELECT
+                        normy_Nazwa,
+                        normy_Din,
+                        normy_Iso,
+                        normy_Pn,
+                        normy_Plik
+                    FROM normy
+                    WHERE normy_{column} = '{selected}'
+                """
+            )
+        return query
+        # self.combo_box_din_p2.addItems(['aaaaa', 'sssss', 'ffff'])
+
 
     # def btn_add_new_position_func(self):
     #    self.add_window = WindowAddPosition()
