@@ -1,6 +1,5 @@
 import sys
-from unittest import result
-from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QTabWidget, QSizePolicy
+from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QTabWidget
 from PyQt6.QtWidgets import QLabel, QPushButton, QListWidget, QLineEdit, QGridLayout, QComboBox, QFormLayout
 from PyQt6.QtCore import Qt, QSize
 from src.position import Position
@@ -13,7 +12,7 @@ STYLE = """
             border-radius: 5px;
             font: bold 12px;}
     QListWidget {font: bold 12px;}"""
-            # padding: 0.5px;}
+
 
 class SetUpWindow(QWidget):
     """Class parent for all my windows.
@@ -250,9 +249,7 @@ class Window(SetUpWindow):
         # self.layout_page_2.addWidget(self.label_1_p2, 0, 0)
         # self.layout_page_2.addWidget(self.combo_box_1_p2, 1, 0)
 
-
         # END page2
-
 
         self.show()
         # turn off resizing
@@ -513,7 +510,6 @@ class Window(SetUpWindow):
             )
         return query
         # self.combo_box_din_p2.addItems(['aaaaa', 'sssss', 'ffff'])
-
 
     # def btn_add_new_position_func(self):
     #    self.add_window = WindowAddPosition()

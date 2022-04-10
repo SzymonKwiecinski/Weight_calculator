@@ -9,7 +9,7 @@ def test_db_file_exist_in_main_dir():
 
 @mark.sqlite
 def test_table_waga_exist_in_db(sql):
-    assert sql.query_to_list("SELECT name FROM sqlite_master") == ['waga']
+    assert sql.query_to_list("SELECT name FROM sqlite_master") == ['waga', 'normy']
 
 @mark.sqlite
 @mark.parametrize('column_name',[
