@@ -1,9 +1,13 @@
+from asyncio.windows_events import NULL
 import sys
+import os
+import re
 from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QTabWidget
 from PyQt6.QtWidgets import QLabel, QPushButton, QListWidget, QLineEdit, QGridLayout, QComboBox, QFormLayout
 from PyQt6.QtCore import Qt, QSize
 from src.position import Position
 from src.sqlite import Sqlite
+# from src.norm import Norm
 from src import tools
 
 STYLE = """
@@ -37,6 +41,7 @@ class Window(SetUpWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle('Przelicznik Wagowy')
+        # self.files_norm = Norm()
         self.ui()
 
     def ui(self):
@@ -225,29 +230,30 @@ class Window(SetUpWindow):
         self.tab.addTab(self.widget_page_2, 'DIN/ISO/PN')
         self.label_1_p2 = QLabel('Nazwa długa normy')
         self.label_1_p2.setWordWrap(True)
-        self.label_din_p2 = QLabel('DIN')
-        self.label_pn_p2 = QLabel('PN')
-        self.label_iso_p2 = QLabel('ISO')
+        self.label_din_p2 = QLabel('DIN ')
+        self.label_pn_p2 = QLabel('PN  ')
+        self.label_iso_p2 = QLabel('ISO ')
+        self.label_other_p2 = QLabel('INNE')
         self.combo_box_din_p2 = QComboBox()
-        self.combo_box_din_p2.textActivated.connect(self.combo_box_din_func_p2)
+        self.combo_box_din_p2.textActivated.connect(self.combo_box_func_p2)
         self.combo_box_iso_p2 = QComboBox()
-        self.combo_box_iso_p2.textActivated.connect(self.combo_box_iso_func_p2)
+        self.combo_box_iso_p2.textActivated.connect(self.combo_box_func_p2)
         self.combo_box_pn_p2 = QComboBox()
-        self.combo_box_pn_p2.textActivated.connect(self.combo_box_pn_func_p2)
+        self.combo_box_pn_p2.textActivated.connect(self.combo_box_func_p2)
+        self.combo_box_other_p2 = QComboBox()
+        self.combo_box_other_p2.textActivated.connect(self.combo_box_func_p2)
+        
         self.btn_norma_p2 = QPushButton('Otwórz katalog/normę')
-        # self.combo_box_1_p2.addItems([str(x) for x in range(100)])
+        self.btn_norma_p2.clicked.connect(self.open_norm_file_p2)
+        self.btn_norma_p2.setDisabled(True)
         self.populate_norm_list()
 
-        # self.label_1_p2.setAlignment(Qt.AlignmentFlag.AlignTop)
-        # self.label_1_p2.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed))
         self.layout_page_2.addRow(self.label_1_p2)
         self.layout_page_2.addRow(self.label_din_p2, self.combo_box_din_p2)
-        self.layout_page_2.addRow(self.label_pn_p2, self.combo_box_iso_p2)
-        self.layout_page_2.addRow(self.label_iso_p2, self.combo_box_pn_p2)
+        self.layout_page_2.addRow(self.label_iso_p2, self.combo_box_iso_p2)
+        self.layout_page_2.addRow(self.label_pn_p2, self.combo_box_pn_p2)
+        self.layout_page_2.addRow(self.label_other_p2, self.combo_box_other_p2)
         self.layout_page_2.addRow(self.btn_norma_p2)
-
-        # self.layout_page_2.addWidget(self.label_1_p2, 0, 0)
-        # self.layout_page_2.addWidget(self.combo_box_1_p2, 1, 0)
 
         # END page2
 
@@ -461,7 +467,9 @@ class Window(SetUpWindow):
         norms = {
             'din': ['normy_Din', self.combo_box_din_p2],
             'pn': ['normy_Pn', self.combo_box_pn_p2],
-            'iso': ['normy_Iso', self.combo_box_iso_p2]}
+            'iso': ['normy_Iso', self.combo_box_iso_p2]
+            # 'other': ['', self.combo_box_other_p2]
+        }
         with Sqlite() as sql:
             for norm in norms.values():
                 results = sql.query_to_list(
@@ -477,23 +485,63 @@ class Window(SetUpWindow):
                 norm[1].addItem('')
                 norm[1].addItems(results)
 
-    def combo_box_din_func_p2(self, selected):
-        results = self.select_one_row(selected, 'Din')
-        self.combo_box_iso_p2.setCurrentText(results[0][2])
-        self.combo_box_pn_p2.setCurrentText(results[0][3])
-        self.label_1_p2.setText(results[0][0])
+            results = sql.query_to_list(
+                    f"""SELECT
+                            DISTINCT normy_Nazwa
+                        FROM normy
+                        WHERE
+                            (normy_Din is NULL OR normy_Din = '')
+                            AND (normy_Iso is NULL OR normy_Iso = '')
+                            AND (normy_Pn is NULL OR normy_Pn = '')
+                    """
+            )
+            self.combo_box_other_p2.addItem('')
+            self.combo_box_other_p2.addItems(results)
 
-    def combo_box_iso_func_p2(self, selected):
-        results = self.select_one_row(selected, 'Iso')
-        self.combo_box_din_p2.setCurrentText(results[0][1])
-        self.combo_box_pn_p2.setCurrentText(results[0][3])
-        self.label_1_p2.setText(results[0][0])
+        
 
-    def combo_box_pn_func_p2(self, selected):
-        results = self.select_one_row(selected, 'Pn')
-        self.combo_box_iso_p2.setCurrentText(results[0][2])
-        self.combo_box_din_p2.setCurrentText(results[0][1])
-        self.label_1_p2.setText(results[0][0])
+    def combo_box_func_p2(self, selected):
+        if selected != '':
+            if re.search('DIN', selected, re.RegexFlag.I):
+                results = self.select_one_row(selected, 'Din')
+                self.combo_box_iso_p2.setCurrentText(results[0][2])
+                self.combo_box_pn_p2.setCurrentText(results[0][3])
+                self.combo_box_other_p2.setCurrentText('')
+                self.label_1_p2.setText(results[0][0])
+                self.manage_norm_button_p2(results[0][4])
+            elif re.search('PN', selected, re.RegexFlag.I):
+                results = self.select_one_row(selected, 'Pn')
+                self.combo_box_iso_p2.setCurrentText(results[0][2])
+                self.combo_box_din_p2.setCurrentText(results[0][1])
+                self.combo_box_other_p2.setCurrentText('')
+                self.label_1_p2.setText(results[0][0])
+                self.manage_norm_button_p2(results[0][4])
+            elif re.search('ISO', selected, re.RegexFlag.I):
+                results = self.select_one_row(selected, 'Iso')
+                self.combo_box_din_p2.setCurrentText(results[0][1])
+                self.combo_box_pn_p2.setCurrentText(results[0][3])
+                self.combo_box_other_p2.setCurrentText('')
+                self.label_1_p2.setText(results[0][0])
+                self.manage_norm_button_p2(results[0][4])
+            else:
+                results = self.select_one_row(selected, 'Nazwa')
+                self.combo_box_din_p2.setCurrentText('')
+                self.combo_box_iso_p2.setCurrentText('')
+                self.combo_box_pn_p2.setCurrentText('')
+                self.label_1_p2.setText(results[0][0])
+                self.manage_norm_button_p2(results[0][4])
+
+    def manage_norm_button_p2(self, selected):
+        if selected is not None and selected != '':
+            self.file_norm_p2 = selected
+            self.btn_norma_p2.setEnabled(True)
+            self.btn_norma_p2.setText(selected)
+        else:
+            self.btn_norma_p2.setText('Brak rysunku w bazie danych')
+            self.btn_norma_p2.setDisabled(True)
+
+    def open_norm_file_p2(self):
+        os.startfile(f'normy\{self.file_norm_p2}')
 
     def select_one_row(self, selected, column):
         with Sqlite() as sql:
@@ -509,7 +557,9 @@ class Window(SetUpWindow):
                 """
             )
         return query
-        # self.combo_box_din_p2.addItems(['aaaaa', 'sssss', 'ffff'])
+    
+    # def find_norm_file(self, ):
+    #     pass
 
     # def btn_add_new_position_func(self):
     #    self.add_window = WindowAddPosition()

@@ -7,7 +7,8 @@
 # TO DO
   * [x] tests for position
   * [x] tests for gui
-  * [ ] Database for norms [name, din, iso, pn, file_path]
+  * [x] Database for norms [name, din, iso, pn, file_path]
+  * [ ] Dodanie przycisku który chowa kalkulator do małej postaci kółeczka jesli sie na nie kliknie to kalkulator sie pojawia
   * [ ] beautiful README
 
 # Nice links

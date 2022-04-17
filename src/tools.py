@@ -1,4 +1,7 @@
 import re
+from types import NoneType
+
+from attr import Attribute
 
 
 def quick_sort(arr: list, type: str = 'number') -> list:
@@ -32,27 +35,30 @@ def quick_sort(arr: list, type: str = 'number') -> list:
     if type not in ['str', 'number']:
         raise TypeError
 
-    if type == 'str':
-        lenght = len(arr)
-        lo = []
-        hi = []
+    try:
+        if type == 'str':
+            lenght = len(arr)
+            lo = []
+            hi = []
 
-        if lenght <= 1:
-            return arr
-        else:
-            pivot_int = int(re.search('[0-9]+', arr[lenght - 1]).group())
-            pivot_str = arr.pop(lenght - 1)
+            if lenght <= 1:
+                return arr
+            else:
+                pivot_int = int(re.search('[0-9]+', arr[lenght - 1]).group())
+                pivot_str = arr.pop(lenght - 1)
 
-            table_int = [int(re.search('[0-9]+', din).group()) for din in arr]
-            table_str = arr
+                table_int = [int(re.search('[0-9]+', din).group()) for din in arr]
+                table_str = arr
 
-            for i, item in enumerate(table_int):
-                if item < pivot_int:
-                    lo.append(table_str[i])
-                else:
-                    hi.append(table_str[i])
+                for i, item in enumerate(table_int):
+                    if item < pivot_int:
+                        lo.append(table_str[i])
+                    else:
+                        hi.append(table_str[i])
 
-            return quick_sort(lo, type=type) + [pivot_str] + quick_sort(hi, type=type)
+                return quick_sort(lo, type=type) + [pivot_str] + quick_sort(hi, type=type)
+    except AttributeError:
+        raise AttributeError('Nie znaleziono liczby w podoanych słowach')
 
     if type == 'number':
         lenght = len(arr)
