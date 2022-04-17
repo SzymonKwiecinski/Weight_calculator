@@ -1,7 +1,4 @@
 import re
-from types import NoneType
-
-from attr import Attribute
 
 
 def quick_sort(arr: list, type: str = 'number') -> list:

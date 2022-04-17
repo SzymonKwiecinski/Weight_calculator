@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import sys
 import os
 import re
@@ -242,7 +241,7 @@ class Window(SetUpWindow):
         self.combo_box_pn_p2.textActivated.connect(self.combo_box_func_p2)
         self.combo_box_other_p2 = QComboBox()
         self.combo_box_other_p2.textActivated.connect(self.combo_box_func_p2)
-        
+
         self.btn_norma_p2 = QPushButton('Otwórz katalog/normę')
         self.btn_norma_p2.clicked.connect(self.open_norm_file_p2)
         self.btn_norma_p2.setDisabled(True)
@@ -486,19 +485,17 @@ class Window(SetUpWindow):
                 norm[1].addItems(results)
 
             results = sql.query_to_list(
-                    f"""SELECT
-                            DISTINCT normy_Nazwa
-                        FROM normy
-                        WHERE
-                            (normy_Din is NULL OR normy_Din = '')
-                            AND (normy_Iso is NULL OR normy_Iso = '')
-                            AND (normy_Pn is NULL OR normy_Pn = '')
+                """SELECT
+                    DISTINCT normy_Nazwa
+                    FROM normy
+                    WHERE
+                        (normy_Din is NULL OR normy_Din = '')
+                        AND (normy_Iso is NULL OR normy_Iso = '')
+                        AND (normy_Pn is NULL OR normy_Pn = '')
                     """
             )
             self.combo_box_other_p2.addItem('')
             self.combo_box_other_p2.addItems(results)
-
-        
 
     def combo_box_func_p2(self, selected):
         if selected != '':
@@ -541,7 +538,7 @@ class Window(SetUpWindow):
             self.btn_norma_p2.setDisabled(True)
 
     def open_norm_file_p2(self):
-        os.startfile(f'normy\{self.file_norm_p2}')
+        os.startfile('normy\\' + self.file_norm_p2)
 
     def select_one_row(self, selected, column):
         with Sqlite() as sql:
@@ -557,7 +554,7 @@ class Window(SetUpWindow):
                 """
             )
         return query
-    
+
     # def find_norm_file(self, ):
     #     pass
 
