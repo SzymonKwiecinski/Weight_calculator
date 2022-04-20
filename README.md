@@ -10,6 +10,19 @@
   * [x] Database for norms [name, din, iso, pn, file_path]
   * [ ] Dodanie przycisku który chowa kalkulator do małej postaci kółeczka jesli sie na nie kliknie to kalkulator sie pojawia
   * [ ] beautiful README
+  * [ ] Instalator jako mały program Tkinter lub plik powershell
+
+# Instruction
+  1. git init
+  2. git remote add origin <https>
+  3. git pull origin master
+  4. python -m venv venv <!-- for python 3.10 --> 
+  5. pip install --upgrade pip
+  6. pip install -r requirements.txt
+  7. pip install -e .
+  8. Add at the begining of the file this line 
+     1. #! C:\Python\Python38\python.exe
+     2. #! "abs path to pathon" <-choose path to venv python  
 
 # Nice links
 [Good Integration Practices](https://docs.pytest.org/en/latest/explanation/goodpractices.html)  
