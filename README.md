@@ -1,18 +1,26 @@
- # Weight calculator for fasteners industry
 ![Tests](https://github.com/SzymonKwiecinski/Weight_calculator/actions/workflows/tests.yml/badge.svg)  
-# Presentation
+# Weight calculator for fasteners industry
+Simple calc app which converts kilograms to pieces and price for the kilogram to price for 100 pieces.
+### Presentation
 * [YouTube movie presentation](https://youtu.be/Jvrw1lSTFWY)
+<p align="center">
+<img src="calc1.PNG" width="250" height="300">
+<img src="calc2.PNG" width="250" height="300">
+</p>  
 
+## Technologies
+* Python 3.10
+* GUI library (PyQt6)
+* SQLite
+* OOP
+* Test framework (PyTest)
+* CI - Git Actions
 
-# TO DO
-  * [x] tests for position
-  * [x] tests for gui
-  * [x] Database for norms [name, din, iso, pn, file_path]
-  * [ ] Dodanie przycisku który chowa kalkulator do małej postaci kółeczka jesli sie na nie kliknie to kalkulator sie pojawia
-  * [ ] beautiful README
-  * [ ] Instalator jako mały program Tkinter lub plik powershell
+## BIG PICTURE
+Because in the fastener industry every company use your own units system. Some of them uses only price for 1 kilo other price for 100 pieces.
+This program was created to meet this demand. Now the office employee can easly and fast compare many offers from diffrent company.
 
-# Instruction
+## Instruction
   1. git init
   2. git remote add origin <https>
   3. git pull origin master
@@ -24,7 +32,7 @@
      1. #! C:\Python\Python38\python.exe
      2. #! "abs path to pathon" <-choose path to venv python  
 
-# Nice links
+## Nice links
 [Good Integration Practices](https://docs.pytest.org/en/latest/explanation/goodpractices.html)  
 [Packaging a python library](https://blog.ionelmc.ro/2014/05/25/python-packaging/#the-structure)  
 [Automated Testing in Python with pytest, tox, and GitHub Actions](https://www.youtube.com/watch?v=DhUpxWjOhME&t=1100s)  
