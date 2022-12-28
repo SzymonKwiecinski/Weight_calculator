@@ -17,8 +17,7 @@ Simple calc app which converts kilograms to pieces and price for the kilogram to
 * CI - Git Actions
 
 ## BIG PICTURE
-Because in the fastener industry every company use your own units system. Some of them uses only price for 1 kilo other price for 100 pieces.
-This program was created to meet this demand. Now the office employee can easly and fast compare many offers from diffrent company.
+In the fastener industry, each company use its own unit system. Sometimes we received price for 100 pieces, sometimes for 1 kilogram etc. This program was created to solve this problem. Now the office employees can easily and fast compare many offers from a different company.
 
 ## Instruction
   1. git init
